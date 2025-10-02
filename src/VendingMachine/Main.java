@@ -2,24 +2,11 @@ package VendingMachine;
 
 import java.util.Scanner;
 
+// 신재윤
+
 public class Main {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-
-        VendingMachine VM = new VendingMachine();
-        You customer = new You();
-        int money = 0;
-
-        System.out.print("가지고 싶은 돈 액수를 입력하세요: ");
-        try {
-            money = sc.nextShort();
-        } catch (Exception e) {
-            System.out.println("너무 큰 단위입니다.");
-        }
-
-        customer.getMoney(money);
-
-        System.out.println(customer.money);
+        Start start = new Start();
     }
 }
 
@@ -34,4 +21,50 @@ public class Main {
 
 // 음료 정보 확인
 // 상품 낙하 랜덤으로 잘못 낙하돼서 터지게 하기
-//
+
+class Start {
+    Start() {
+        PopUpWindow popup = new PopUpWindow("popup1");
+        VendingMachine VM = new VendingMachine();
+        VM.drinkStockNotZero = new boolean[2][5];
+
+        String answerOfStart = openPopUp("startPopUp", "START: yes | no", true);
+
+        switch (answerOfStart) {
+            case "yes", "YES":
+                String stock = openPopUp("stockPopUp", "Drink Stock[,,,,,,,,,]", true);
+                String[] stockArrayOfString = separationCommas(stock);
+                try {
+                    for (int i = 0; i < stockArrayOfString.length; i++) {
+                        VM.drinkStockNotZero[i / 5][i % 5] = (Integer.parseInt(stockArrayOfString[i]) > 0);
+                    }
+
+                    VM.createBody();
+                } catch (NumberFormatException e) {
+                    openPopUp("Error", "Wrong Input or Error", false);
+                    break;
+                }
+                break;
+            case "no", "NO":
+                break;
+            default:
+                openPopUp("Error", "Wrong Input or Error", false);
+        }
+    }
+
+    String openPopUp(String popUpName, String popUpMessage, boolean isInput) {
+        PopUpWindow popup = new PopUpWindow(popUpName);
+
+        if (isInput) {
+            return popup.createPopUp(popUpMessage, true);
+        } else {
+            popup.createPopUp(popUpMessage, false);
+            return "0";
+        }
+    }
+
+    String[] separationCommas(String input) {
+        String[] commas = input.split(",");
+        return commas;
+    }
+}

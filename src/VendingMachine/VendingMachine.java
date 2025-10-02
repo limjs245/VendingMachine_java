@@ -76,7 +76,7 @@ public class VendingMachine {
             }
             System.out.println();
         }
-        System.out.println("\n\n");
+        System.out.println("\n");
     }
 
     private static class Button {
