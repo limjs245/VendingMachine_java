@@ -1,17 +1,12 @@
 package VendingMachine;
 
-// 신재윤
+import java.util.Scanner;
 
-import java.util.concurrent.TimeUnit;
+// 신재윤
 
 public class Main {
     public static void main(String[] args) {
         Start start = new Start();
-
-        while (true) {
-            byte pickDrinkNumber = (byte)Integer.parseInt(start.openPopUp("pickDrink", "Which do you want to pick(number)", true));
-            start.drinkDischarge(pickDrinkNumber);
-        }
     }
 }
 
@@ -28,10 +23,10 @@ public class Main {
 // 상품 낙하 랜덤으로 잘못 낙하돼서 터지게 하기
 
 class Start {
-    int[][] drinkStock = new int[2][5];
-
     Start() {
         PopUpWindow popup = new PopUpWindow("popup1");
+        VendingMachine VM = new VendingMachine();
+        VM.drinkStockNotZero = new boolean[2][5];
 
         String answerOfStart = openPopUp("startPopUp", "START: yes | no", true);
 
@@ -39,21 +34,15 @@ class Start {
             case "yes", "YES":
                 String stock = openPopUp("stockPopUp", "Drink Stock[,,,,,,,,,]", true);
                 String[] stockArrayOfString = separationCommas(stock);
-
-                if (stockArrayOfString.length != 10) {
-                    openPopUp("Error", "Wrong Input or Error", false);
-                    Start reStart = new Start();
-                }
-
                 try {
                     for (int i = 0; i < stockArrayOfString.length; i++) {
-                        drinkStock[i / 5][i % 5] = Integer.parseInt(stockArrayOfString[i]);
+                        VM.drinkStockNotZero[i / 5][i % 5] = (Integer.parseInt(stockArrayOfString[i]) > 0);
                     }
 
-                    updateVendingMachine(false);
+                    VM.createBody();
                 } catch (NumberFormatException e) {
                     openPopUp("Error", "Wrong Input or Error", false);
-                    Start reStart = new Start();
+                    break;
                 }
                 break;
             case "no", "NO":
@@ -77,38 +66,5 @@ class Start {
     String[] separationCommas(String input) {
         String[] commas = input.split(",");
         return commas;
-    }
-
-    void updateVendingMachine(boolean isDrinkOut) {
-        VendingMachine VM = new VendingMachine();
-        VM.drinkStockNotZero = new boolean[2][5];
-
-        for (int i = 0; i < drinkStock.length; i++) {
-            for (int j = 0; j < drinkStock[i].length; j++) {
-                VM.drinkStockNotZero[i][j] = drinkStock[i][j] > 0;
-            }
-        }
-        VM.isDrinkOut =  isDrinkOut;
-        VM.createBody();
-    }
-
-    void drinkDischarge(byte drinkNumber) {
-        if (drinkNumber <= 10) {
-            if (drinkStock[(drinkNumber - 1) / 5][(drinkNumber - 1) % 5] > 0) {
-                drinkStock[(drinkNumber - 1) / 5][(drinkNumber - 1) % 5] -= 1;
-
-                updateVendingMachine(true);
-
-                try {
-                    TimeUnit.SECONDS.sleep(2); // 1초 동안 지연
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                updateVendingMachine(false);
-            } else {
-                openPopUp("Error", "Sold Out", false);
-            }
-        }
     }
 }
