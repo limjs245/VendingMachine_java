@@ -3,7 +3,7 @@ package VendingMachine;
 import java.util.Scanner;
 
 public class PopUpWindow {
-    Scanner sc = new Scanner(System.in);
+    private final Scanner sc = new Scanner(System.in);
 
     String popUpName = "";
 
@@ -12,7 +12,7 @@ public class PopUpWindow {
     }
 
     String createPopUp(String popUpMessage, boolean isInput) {
-        byte leftPadding = (byte)((36 - popUpMessage.length()) / 2);
+        final byte leftPadding = (byte)((36 - popUpMessage.length()) / 2);
 
         System.out.println("⌈‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾⌉");
         System.out.println("|                                     |");
@@ -35,5 +35,10 @@ public class PopUpWindow {
         } else {
             return "0";
         }
+    }
+
+    public void closeScanner() {
+        createPopUp("Good Bye!", false);
+        sc.close();
     }
 }

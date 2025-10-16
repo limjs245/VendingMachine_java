@@ -9,10 +9,13 @@ public class VendingMachine {
     boolean isDrinkOut = false;
     boolean[][] drinkStockNotZero;
 
-    VendingMachine() {}
+    VendingMachine(boolean isDrinkOut, boolean[][] drinkStockNotZero) {
+        this.isDrinkOut = isDrinkOut;
+        this.drinkStockNotZero = drinkStockNotZero;
+    }
 
     void createBody() {
-        Button buttons = new Button(drinkStockNotZero);
+        final Button buttons = new Button(drinkStockNotZero);
 
         for (byte i = 0; i <= 14; i++) {
             for (byte j = 0; j <= 21; j++) {
@@ -80,7 +83,7 @@ public class VendingMachine {
     }
 
     private static class Button {
-        boolean[][] drinkStockNotZero;
+        private final boolean[][] drinkStockNotZero;
 
         Button(boolean[][] drinkStockNotZero) {
             this.drinkStockNotZero = drinkStockNotZero;

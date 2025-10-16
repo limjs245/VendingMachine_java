@@ -6,11 +6,14 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void main(String[] args) {
-        Start start = new Start();
+        final PopUpWindow popUp = new PopUpWindow("popUpOfVendingmachine");
+        final RUN run = new RUN(popUp);
 
-        while (true) {
-            byte pickDrinkNumber = (byte)Integer.parseInt(start.openPopUp("pickDrink", "Which do you want to pick(number)", true));
-            start.drinkDischarge(pickDrinkNumber);
+        boolean isRunning = run.StartVendingMachine();
+
+        while (isRunning) {
+            String pickDrinkNumber = run.openPopUp(popUp, "Which do you want to pick(number)", true);
+            isRunning = run.drinkDischarge(popUp, pickDrinkNumber);
         }
     }
 }
@@ -27,45 +30,54 @@ public class Main {
 // 음료 정보 확인
 // 상품 낙하 랜덤으로 잘못 낙하돼서 터지게 하기
 
-class Start {
-    int[][] drinkStock = new int[2][5];
+class RUN {
+    private final int[][] drinkStock = new int[2][5];
+    PopUpWindow popup;
 
-    Start() {
-        PopUpWindow popup = new PopUpWindow("popup1");
+    RUN(PopUpWindow popup) {
+        this.popup = popup;
+    }
 
-        String answerOfStart = openPopUp("startPopUp", "START: yes | no", true);
+    boolean StartVendingMachine() {
+        final String answerOfStart = openPopUp(popup, "START: yes | no", true);
 
         switch (answerOfStart) {
             case "yes", "YES":
-                String stock = openPopUp("stockPopUp", "Drink Stock[,,,,,,,,,]", true);
-                String[] stockArrayOfString = separationCommas(stock);
-
-                if (stockArrayOfString.length != 10) {
-                    openPopUp("Error", "Wrong Input or Error", false);
-                    Start reStart = new Start();
-                }
-
-                try {
-                    for (int i = 0; i < stockArrayOfString.length; i++) {
-                        drinkStock[i / 5][i % 5] = Integer.parseInt(stockArrayOfString[i]);
-                    }
-
-                    updateVendingMachine(false);
-                } catch (NumberFormatException e) {
-                    openPopUp("Error", "Wrong Input or Error", false);
-                    Start reStart = new Start();
-                }
+                setDrinkStock();
                 break;
             case "no", "NO":
-                break;
+                popup.closeScanner();
+                return false;
             default:
-                openPopUp("Error", "Wrong Input or Error", false);
+                openPopUp(popup, "Wrong Input or Error-001", false);
+                 return StartVendingMachine();
         }
+        return true;
     }
 
-    String openPopUp(String popUpName, String popUpMessage, boolean isInput) {
-        PopUpWindow popup = new PopUpWindow(popUpName);
+    String[] setDrinkStock() {
+        final String stock = openPopUp(popup, "Drink Stock[,,,,,,,,,]", true);
+        String[] stockArrayOfString = stock.split(",");
 
+        if (stockArrayOfString.length != 10) {
+            openPopUp(popup, "Wrong Input or Error-002", false);
+            stockArrayOfString = setDrinkStock();
+        } else {
+            try {
+                for (int i = 0; i < stockArrayOfString.length; i++) {
+                    drinkStock[i / 5][i % 5] = Integer.parseInt(stockArrayOfString[i]);
+                }
+
+                updateVendingMachine(false);
+            } catch (Exception e) {
+                openPopUp(popup, "Wrong Input or Error-003", false);
+                setDrinkStock();
+            }
+        }
+        return stockArrayOfString;
+    }
+
+    String openPopUp(PopUpWindow popup, String popUpMessage, boolean isInput) {
         if (isInput) {
             return popup.createPopUp(popUpMessage, true);
         } else {
@@ -74,41 +86,43 @@ class Start {
         }
     }
 
-    String[] separationCommas(String input) {
-        String[] commas = input.split(",");
-        return commas;
-    }
-
     void updateVendingMachine(boolean isDrinkOut) {
-        VendingMachine VM = new VendingMachine();
-        VM.drinkStockNotZero = new boolean[2][5];
+        boolean[][] drinkStockNotZero = new boolean[2][5];
 
-        for (int i = 0; i < drinkStock.length; i++) {
-            for (int j = 0; j < drinkStock[i].length; j++) {
-                VM.drinkStockNotZero[i][j] = drinkStock[i][j] > 0;
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 5; j++) {
+                drinkStockNotZero[i][j] = drinkStock[i][j] > 0;
             }
         }
-        VM.isDrinkOut =  isDrinkOut;
+
+        VendingMachine VM = new VendingMachine(isDrinkOut, drinkStockNotZero);
         VM.createBody();
     }
 
-    void drinkDischarge(byte drinkNumber) {
-        if (drinkNumber <= 10) {
-            if (drinkStock[(drinkNumber - 1) / 5][(drinkNumber - 1) % 5] > 0) {
-                drinkStock[(drinkNumber - 1) / 5][(drinkNumber - 1) % 5] -= 1;
+    boolean drinkDischarge(PopUpWindow popUp, String input) {
+        if (input.equals("e")) {
+            popUp.closeScanner();
+            return false;
+        } else {
+            try {
+                final int drinkNumber = Integer.parseInt(input);
 
-                updateVendingMachine(true);
-
-                try {
-                    TimeUnit.SECONDS.sleep(2); // 1초 동안 지연
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if (drinkNumber <= 10 && drinkNumber > 0) {
+                    if (drinkStock[(drinkNumber - 1) / 5][(drinkNumber - 1) % 5] > 0) {
+                        drinkStock[(drinkNumber - 1) / 5][(drinkNumber - 1) % 5] -= 1;
+                        updateVendingMachine(true);
+                        TimeUnit.SECONDS.sleep(2);
+                        updateVendingMachine(false);
+                    } else {
+                        openPopUp(popUp, "Sold Out", false);
+                    }
+                } else {
+                    popUp.createPopUp("Press 1 to 10 drinks or 'e'", false);
                 }
-
-                updateVendingMachine(false);
-            } else {
-                openPopUp("Error", "Sold Out", false);
+            } catch (Exception e) {
+                popUp.createPopUp("Press 1 to 10 drinks or 'e'", false);
             }
         }
+        return true;
     }
 }
