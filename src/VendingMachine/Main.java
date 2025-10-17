@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void main(String[] args) {
-        final PopUpWindow popUp = new PopUpWindow("popUpOfVendingmachine");
+        final PopUpWindow popUp = new PopUpWindow();
         final RUN run = new RUN(popUp);
 
         boolean isRunning = run.StartVendingMachine();
@@ -32,13 +32,13 @@ public class Main {
 
 class RUN {
     private final int[][] drinkStock = new int[2][5];
-    PopUpWindow popup;
+    private final PopUpWindow popup;
 
     RUN(PopUpWindow popup) {
         this.popup = popup;
     }
 
-    boolean StartVendingMachine() {
+    public boolean StartVendingMachine() {
         final String answerOfStart = openPopUp(popup, "START: yes | no", true);
 
         switch (answerOfStart) {
@@ -55,7 +55,7 @@ class RUN {
         return true;
     }
 
-    String[] setDrinkStock() {
+    private String[] setDrinkStock() {
         final String stock = openPopUp(popup, "Drink Stock[,,,,,,,,,]", true);
         String[] stockArrayOfString = stock.split(",");
 
@@ -68,7 +68,7 @@ class RUN {
                     drinkStock[i / 5][i % 5] = Integer.parseInt(stockArrayOfString[i]);
                 }
 
-                updateVendingMachine(false);
+                updateVendingMachine(new int[]{0, 0});
             } catch (Exception e) {
                 openPopUp(popup, "Wrong Input or Error-003", false);
                 setDrinkStock();
@@ -77,7 +77,7 @@ class RUN {
         return stockArrayOfString;
     }
 
-    String openPopUp(PopUpWindow popup, String popUpMessage, boolean isInput) {
+    public String openPopUp(PopUpWindow popup, String popUpMessage, boolean isInput) {
         if (isInput) {
             return popup.createPopUp(popUpMessage, true);
         } else {
@@ -86,7 +86,7 @@ class RUN {
         }
     }
 
-    void updateVendingMachine(boolean isDrinkOut) {
+    private VendingMachine updateVendingMachine(int[] isDrinkOut) {
         boolean[][] drinkStockNotZero = new boolean[2][5];
 
         for (int i = 0; i < 2; i++) {
@@ -97,9 +97,10 @@ class RUN {
 
         VendingMachine VM = new VendingMachine(isDrinkOut, drinkStockNotZero);
         VM.createBody();
+        return VM;
     }
 
-    boolean drinkDischarge(PopUpWindow popUp, String input) {
+    public boolean drinkDischarge(PopUpWindow popUp, String input) {
         if (input.equals("e")) {
             popUp.closeScanner();
             return false;
@@ -110,9 +111,10 @@ class RUN {
                 if (drinkNumber <= 10 && drinkNumber > 0) {
                     if (drinkStock[(drinkNumber - 1) / 5][(drinkNumber - 1) % 5] > 0) {
                         drinkStock[(drinkNumber - 1) / 5][(drinkNumber - 1) % 5] -= 1;
-                        updateVendingMachine(true);
+                        VendingMachine VM = updateVendingMachine(new int[] {1, drinkNumber});
                         TimeUnit.SECONDS.sleep(2);
-                        updateVendingMachine(false);
+                        updateVendingMachine(new int[]{0, 0});
+                        VM.openDrinkInfo(drinkNumber);
                     } else {
                         openPopUp(popUp, "Sold Out", false);
                     }
