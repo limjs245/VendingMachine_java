@@ -18,6 +18,9 @@ public class Main {
     }
 }
 
+// 돈 넣기
+// 돈 계산
+
 // 남은 음료수 개수 보여주기(없을 때 x뜨기, 있으면 숫자 뜨기)
 // 돈 받기(돈 입력 & 받은 돈 뜨기)
 // 음료 나열해서 보여주기 & Light 점등하기
@@ -114,6 +117,7 @@ class RUN {
                         VendingMachine VM = updateVendingMachine(new int[] {1, drinkNumber});
                         TimeUnit.SECONDS.sleep(2);
                         updateVendingMachine(new int[]{0, 0});
+                        TimeUnit.SECONDS.sleep(2);
                         VM.openDrinkInfo(drinkNumber);
                     } else {
                         openPopUp(popUp, "Sold Out", false);
