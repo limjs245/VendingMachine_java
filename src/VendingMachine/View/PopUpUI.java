@@ -1,18 +1,18 @@
 package VendingMachine.View;
 
 import VendingMachine.Model.ModelChangeListener;
-import VendingMachine.Model.User;
+import VendingMachine.Model.UserCommunicate;
 
 public class PopUpUI implements ModelChangeListener {
-    private User user;
+    private final UserCommunicate user;
 
-    public PopUpUI(User user) {
+    public PopUpUI(UserCommunicate user) {
         this.user = user;
         this.user.addListener(this);
     }
 
     public void createPopUp(String popUpMessage) {
-        final byte leftPadding = (byte)((36 - popUpMessage.length()) / 2);
+        final int leftPadding = (36 - popUpMessage.length()) / 2;
 
         System.out.println("⌈‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾⌉");
         System.out.println("|                                     |");

@@ -1,10 +1,15 @@
 package VendingMachine.View;
 
-public class VendingMachineUI {
+import VendingMachine.Model.ModelChangeListener;
+import VendingMachine.Model.VendingMachine;
+
+public class VendingMachineUI implements ModelChangeListener {
+    private VendingMachine machine;
     private int outDrinkNum;
 
-    VendingMachineUI() {
-        createBody();
+    public VendingMachineUI(VendingMachine machine) {
+        this.machine = machine;
+        this.machine.addListener(this);
     }
 
     public void createBody() {
@@ -98,5 +103,9 @@ public class VendingMachineUI {
             System.out.println();
         }
         System.out.println("\n\n");
+    }
+
+    @Override
+    public void onModelChange() {
     }
 }

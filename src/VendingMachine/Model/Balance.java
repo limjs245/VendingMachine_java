@@ -1,17 +1,20 @@
 package VendingMachine.Model;
 
+import VendingMachine.Controller;
+
 // 돈 계산 클래스
 // 돈을 클래스로 만드려다가 돈 관련을 클래스로 만들었음
 // 돈 자체를 객체로 관리
 public class Balance {
+    private Controller controller;
+
     short[] moneyArray = new short[6];
     int totalMoney;
 
     // 기본 생성자
     // 생성 시 돈 확인 및 분류
-    Balance(int totalMoney) {
-        this.totalMoney = totalMoney;
-        moneyArray = reverseCalculation(totalMoney);
+    public Balance(Controller controller) {
+        this.controller = controller;
     }
 
     // 총 금액 계산
