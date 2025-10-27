@@ -1,9 +1,9 @@
-package VendingMachine;
+package VendingMachine.Algorithm;
 
 // 음료수 클래스
 // 음료수들을 객체로 관리
 // -> 여러 음료수 존재
-public class Drink {
+public class DrinkStorage {
     // 변수 목록: id, 이름, 재고, 가격, 타입, 브랜드, 유통기한
     private final int drinkId;
     private final String drinkName;
@@ -14,7 +14,7 @@ public class Drink {
     private final String expirationDate;
 
     // 기본 생성자
-    Drink(int drinkId, String drinkName, int price, String drinkChar ,String drinkType, String drinkBrand, String expirationDate) {
+    DrinkStorage(int drinkId, String drinkName, int price, String drinkChar , String drinkType, String drinkBrand, String expirationDate) {
         this.drinkId = drinkId;
         this.drinkName = drinkName;
         this.price = price;

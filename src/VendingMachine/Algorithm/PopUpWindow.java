@@ -1,11 +1,11 @@
-package VendingMachine;
+package VendingMachine.Algorithm;
 
 import java.util.Scanner;
 
 public class PopUpWindow {
     private final Scanner sc = new Scanner(System.in);
 
-    PopUpWindow() {}
+    public PopUpWindow() {}
 
     public String createPopUp(String popUpMessage, boolean isInput) {
         final byte leftPadding = (byte)((36 - popUpMessage.length()) / 2);
@@ -33,7 +33,7 @@ public class PopUpWindow {
         }
     }
 
-    public void createDrinkPopUp(Drink drink) {
+    public void createDrinkPopUp(DrinkStorage drink) {
         final String name = drink.getDrinkName();
         final String price = drink.getPrice() + " 원";
         final String type = "타입: " + drink.getDrinkType();

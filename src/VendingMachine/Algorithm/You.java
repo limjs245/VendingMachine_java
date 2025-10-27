@@ -1,4 +1,4 @@
-package VendingMachine;
+package VendingMachine.Algorithm;
 
 // 김수민
 
