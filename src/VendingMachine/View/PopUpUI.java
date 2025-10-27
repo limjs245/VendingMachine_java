@@ -1,4 +1,4 @@
-package VendingMachine.UI;
+package VendingMachine.View;
 
 public class PopUpUI {
 

@@ -1,4 +1,4 @@
-package VendingMachine.UI;
+package VendingMachine.View;
 
 public class VendingMachineUI {
     private int outDrinkNum;

@@ -15,6 +15,10 @@ public class User {
 
     }
 
+    public void showDrinkInfo() {
+
+    }
+
     public void closeScanner() {
         sc.close();
     }
