@@ -1,10 +1,5 @@
 package VendingMachine.UI;
 
-import VendingMachine.Algorithm.DrinkStorage;
-import VendingMachine.Algorithm.VendingMachine;
-
-import java.util.ArrayList;
-
 public class VendingMachineUI {
     private int outDrinkNum;
 

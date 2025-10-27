@@ -2,20 +2,9 @@ package VendingMachine;
 
 // 신재윤
 
-import VendingMachine.Algorithm.PopUpWindow;
-import VendingMachine.Algorithm.RUN;
-
 public class Main {
     public static void main(String[] args) {
-        final PopUpWindow popUp = new PopUpWindow();
-        final RUN run = new RUN(popUp);
-
-        boolean isRunning = run.StartVendingMachine();
-
-        while (isRunning) {
-            String pickDrinkNumber = run.openPopUp(popUp, "Which do you want to pick(number)", true);
-            isRunning = run.drinkDischarge(popUp, pickDrinkNumber);
-        }
+        Controller run = new Controller();
     }
 }
 
