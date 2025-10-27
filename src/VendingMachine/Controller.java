@@ -1,6 +1,7 @@
 package VendingMachine;
 
 import VendingMachine.Model.User;
+import VendingMachine.View.PopUpUI;
 
 public class Controller {
     private int State; // 0: start, 1: popUpAndAnimation, 2: drinkInfoPopUp, 3: end
