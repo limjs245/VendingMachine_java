@@ -1,4 +1,4 @@
-package VendingMachine.Algorithm;
+package VendingMachine.Model;
 
 import java.util.Date;
 import java.util.HashMap;

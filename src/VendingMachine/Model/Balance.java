@@ -1,4 +1,4 @@
-package VendingMachine.Algorithm;
+package VendingMachine.Model;
 
 // 돈 계산 클래스
 // 돈을 클래스로 만드려다가 돈 관련을 클래스로 만들었음

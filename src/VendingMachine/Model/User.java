@@ -1,4 +1,4 @@
-package VendingMachine.Algorithm;
+package VendingMachine.Model;
 
 import java.util.Scanner;
 
@@ -7,7 +7,13 @@ public class User {
 
     public User() {}
 
+    public void start() {
 
+    }
+
+    public void getInput() {
+
+    }
 
     public void closeScanner() {
         sc.close();
