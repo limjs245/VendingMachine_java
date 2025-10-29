@@ -3,7 +3,6 @@ package VendingMachine;
 import VendingMachine.Model.Balance;
 import VendingMachine.Model.UserCommunicate;
 import VendingMachine.Model.VendingMachine;
-import VendingMachine.View.DrinkUI;
 import VendingMachine.View.PopUpUI;
 import VendingMachine.View.VendingMachineUI;
 
@@ -13,7 +12,6 @@ public class Controller {
     private Balance balance;
     private VendingMachineUI machineUI;
     private PopUpUI popUpUI;
-    private DrinkUI drinkUI;
     private int State; // 0: start, 1: popUpAndAnimation, 2: drinkInfoPopUp, 3: end
 
     public Controller() {
@@ -22,8 +20,6 @@ public class Controller {
         this.balance = new Balance(this);
         this.machineUI = new VendingMachineUI(machine);
         this.popUpUI = new PopUpUI(userCommunicate);
-        this.drinkUI = new DrinkUI();
-
     }
 
     public int getState() { return State; }
@@ -32,12 +28,12 @@ public class Controller {
 
     public void start() {
         setState(0);
-        StateManage();
+        State();
     }
 
     public void stop() {
         setState(3);
-        StateManage();
+        State();
     }
 
     public void nextState() {
@@ -51,10 +47,10 @@ public class Controller {
             stop();
         }
 
-        StateManage();
+        State();
     }
 
-    private void StateManage() {
+    private void State() {
         int state = getState();
 
         if (state == 0) {

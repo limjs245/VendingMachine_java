@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UserCommunicate {
-    private Controller controller;
+    private final Controller controller;
     private final Scanner sc = new Scanner(System.in);
     private final List<ModelChangeListener> listeners = new ArrayList<ModelChangeListener>();
     private String message;
@@ -19,7 +19,8 @@ public class UserCommunicate {
             "Please select a drink number.", // 4
             "Insufficient funds.", // 5
             "Invalid input.", // 6
-            "Shutting down." // 7
+            "Sold out.", // 7
+            "Shutting down." // 8
     ));
 
     public UserCommunicate(Controller controller) {
