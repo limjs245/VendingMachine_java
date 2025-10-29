@@ -1,9 +1,9 @@
 package VendingMachine.View;
 
-import VendingMachine.Model.ModelChangeListener;
+import VendingMachine.Model.PopUpChangeListener;
 import VendingMachine.Model.UserCommunicate;
 
-public class PopUpUI implements ModelChangeListener {
+public class PopUpUI implements PopUpChangeListener {
     private final UserCommunicate user;
 
     public PopUpUI(UserCommunicate user) {
@@ -14,7 +14,7 @@ public class PopUpUI implements ModelChangeListener {
     public void createPopUp(String popUpMessage) {
         final int leftPadding = (36 - popUpMessage.length()) / 2;
 
-        System.out.println("⌈‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾⌉");
+        System.out.println("\n⌈‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾⌉");
         System.out.println("|                                     |");
         System.out.print("|");
 
@@ -28,8 +28,7 @@ public class PopUpUI implements ModelChangeListener {
     }
 
     @Override
-    public void onModelChange() {
-        String message = user.getMessage();
-        createPopUp(message);
+    public void onPopUpChange() {
+        createPopUp(user.getMessage());
     }
 }

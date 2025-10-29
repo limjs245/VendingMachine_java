@@ -20,8 +20,8 @@ public class Inventory {
     }
 
     public void firstSetting() {
+        Random rand = new Random();
         for (int i = 0; i < 10; i++) {
-            Random rand = new Random();
             addDrinkStock(i, rand.nextInt(21));
         }
     }
@@ -42,8 +42,8 @@ public class Inventory {
         };
     }
     public void addDrinkStock(int drinkNum, int addCount) {
-        Drink drink = drink(drinkNum);
         for (int i = 1; i <= addCount; i++) {
+            Drink drink = drink(drinkNum);
             drinkStorages.get(drinkNum).addDrink(drink);
         }
     }

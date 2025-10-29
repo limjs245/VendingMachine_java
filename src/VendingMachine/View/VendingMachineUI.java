@@ -1,22 +1,23 @@
 package VendingMachine.View;
 
-import VendingMachine.Model.ModelChangeListener;
+import VendingMachine.Model.MachineChangeListener;
 import VendingMachine.Model.VendingMachine;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class VendingMachineUI implements ModelChangeListener {
+public class VendingMachineUI implements MachineChangeListener {
     private final VendingMachine machine;
-    private final List<Integer> stocks = new ArrayList<>();
-    private final List<String> drinkChars = new ArrayList<>();
+    private final List<Integer> stocks = new ArrayList<>(List.of(0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+    private final List<String> drinkChars = new ArrayList<>(List.of("", "", "", "", "", "", "", "", "", ""));
 
     public VendingMachineUI(VendingMachine machine) {
         this.machine = machine;
-        this.machine.addListener(this);
+        this.machine.addMachineListener(this);
     }
 
     public void createBody(int outDrinkNum) {
+        System.out.println();
         for (int i = 0; i <= 14; i++) {
             for (int j = 0; j <= 21; j++) {
                 if (i >= 1 && i <= 13 && j >= 1 && j <= 20) {
@@ -105,31 +106,23 @@ public class VendingMachineUI implements ModelChangeListener {
             }
             System.out.println();
         }
-        System.out.println("\n\n");
     }
 
     private String display(int drinkNum) {
         int stock = stocks.get(drinkNum);
         if (stock <= 0) {
-            return "⬛";
+            return "❌";
         } else {
             return "🔸";
         }
     }
 
     @Override
-    public void onModelChange() {
-        for (int i = 0; i <= 10; i++) {
+    public void onMachineChange() {
+        for (int i = 0; i < 10; i++) {
             stocks.set(i, machine.getDrinkStock(i));
             drinkChars.set(i, machine.getDrinkInfo(i).get("char"));
         }
-        int state = machine.getState();
-        if (state == 0) {
-            createBody(-1);
-        } else if (state == 1) {
-            createBody(-1);
-        } else if (state == 2) {
-            createBody(machine.outDrinkNum);
-        }
+        createBody(machine.outDrinkNum);
     }
 }

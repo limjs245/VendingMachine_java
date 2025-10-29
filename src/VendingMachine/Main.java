@@ -5,15 +5,9 @@ package VendingMachine;
 public class Main {
     public static void main(String[] args) {
         Controller controller = new Controller();
-
         controller.start();
     }
 }
-
-// TODO: UI와 알고리즘를 각각의 클래스로 분리하기
-// TODO: 음료수 클래스와 리스트 클래스 만들기
-// TODO: 배열보다 리스트 이용하기
-// TODO: 유통기한 관리는 Queue이용하기
 
 // 돈 넣기
 // 돈 계산

@@ -3,60 +3,90 @@ package VendingMachine;
 import VendingMachine.Model.Balance;
 import VendingMachine.Model.UserCommunicate;
 import VendingMachine.Model.VendingMachine;
+import VendingMachine.View.DrinkInfoPopUpUI;
 import VendingMachine.View.PopUpUI;
 import VendingMachine.View.VendingMachineUI;
 
+import java.util.concurrent.TimeUnit;
+
 public class Controller {
-    private VendingMachine machine;
-    private UserCommunicate userCommunicate;
-    private Balance balance;
-    private VendingMachineUI machineUI;
-    private PopUpUI popUpUI;
-    private int State; // 0: start, 1: popUpAndAnimation, 2: drinkInfoPopUp, 3: end
+    private final VendingMachine machine;
+    private final UserCommunicate userCommunicate;
+    private final Balance balance;
+    private int State; // 0: start, 1: popUp&Animation, 2: drinkInfoPopUp, 3: end
 
     public Controller() {
         this.machine = new VendingMachine(this);
         this.userCommunicate = new UserCommunicate(this);
         this.balance = new Balance(this);
-        this.machineUI = new VendingMachineUI(machine);
-        this.popUpUI = new PopUpUI(userCommunicate);
+        VendingMachineUI machineUI = new VendingMachineUI(machine);
+        PopUpUI popUpUI = new PopUpUI(userCommunicate);
+        DrinkInfoPopUpUI drinkInfoPopUpUI = new DrinkInfoPopUpUI(machine);
     }
 
     public int getState() { return State; }
 
-    public void setState(int state) { State = state; }
-
-    public void start() {
-        setState(0);
+    public void setState(int state) {
+        State = state;
         State();
     }
 
-    public void stop() {
-        setState(3);
-        State();
-    }
+    public void start() { setState(0); }
+
+    public void stop() { setState(3); }
 
     public void nextState() {
         int state = getState();
 
-        if (state == 2) {
-            setState(1);
-        } else if (state < 2) {
-            setState(state + 1);
-        } else {
-            stop();
+        switch (state) {
+            case 0:
+                setState(1);
+                break;
+            case 1:
+                timeSleep(1);
+                setState(2);
+                break;
+            case 2:
+                timeSleep(2);
+                setState(1);
+                break;
+            default: setState(3);
         }
+    }
 
-        State();
+    private void timeSleep(int time) {
+        try {
+            TimeUnit.SECONDS.sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void State() {
         int state = getState();
 
         if (state == 0) {
+            machine.start();
+            userCommunicate.start();
         } else if (state == 1) {
+            machine.CallVendingMachine();
+            int pickDrinkNum = userCommunicate.pickDrink();
+
+            if (pickDrinkNum == -1) {
+                stop();
+                return;
+            }
+
+            if (machine.getDrinkStock(pickDrinkNum) > 0) {
+                machine.getDrink(pickDrinkNum);
+            } else {
+                userCommunicate.soldOut();
+                setState(1);
+            }
         }  else if (state == 2) {
-        }  else if (state == 3) {
+            machine.CallDrinkInfoPopUp();
+        } else if (state == 3) {
+            userCommunicate.end();
         } else {
             stop();
         }

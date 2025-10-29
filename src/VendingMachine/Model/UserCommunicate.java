@@ -3,13 +3,14 @@ package VendingMachine.Model;
 import VendingMachine.Controller;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class UserCommunicate {
     private final Controller controller;
     private final Scanner sc = new Scanner(System.in);
-    private final List<ModelChangeListener> listeners = new ArrayList<ModelChangeListener>();
+    private final List<PopUpChangeListener> listeners = new ArrayList<PopUpChangeListener>();
     private String message;
     private final ArrayList<String> messageList = new ArrayList<>(List.of(
             "Would you like to start?", // 0
@@ -28,24 +29,71 @@ public class UserCommunicate {
     }
 
     public void start() {
-        setMessage(0);
-        String input = getInput();
-
+        String input = "";
+        while (true) {
+            setMessage(0);
+            notifyModelChange();
+            input = getInput();
+            switch (input) {
+                case "yes":
+                    controller.nextState();
+                    return;
+                case "no":
+                    controller.stop();
+                    return;
+                default:
+                    error();
+            }
+        }
     }
 
-    public String getInput() {
+    public String getInput() { return sc.nextLine(); }
+
+    public void end() {
+        setMessage(8);
         notifyModelChange();
-        return sc.nextLine();
+        closeScanner();
     }
 
-    public void closeScanner() {
+    public int pickDrink() {
+        int input = -1;
+        while (input < 1 || input > 10) {
+            setMessage(4);
+            notifyModelChange();
+            String temp = getInput();
+
+            if (temp.equals("e")) {
+                input = 0;
+                break;
+            }
+
+            try {
+                input = Integer.parseInt(temp);
+            } catch (NumberFormatException e) {
+                error();
+            }
+        }
+        return input - 1;
+    }
+
+    public void error() {
+        setMessage(6);
+        notifyModelChange();
+    }
+
+    public void soldOut() {
+        setMessage(7);
+        notifyModelChange();
+    }
+
+    private void closeScanner() {
         sc.close();
     }
 
-    public void addListener(ModelChangeListener listener) { listeners.add(listener); }
+    public void addListener(PopUpChangeListener listener) { listeners.add(listener); }
 
     public void notifyModelChange() {
-        for (ModelChangeListener listener : listeners) { listener.onModelChange(); }
+        for (PopUpChangeListener listener : listeners) { listener.onPopUpChange(); }
     }
 
     public String getMessage() { return message; }
