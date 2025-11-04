@@ -18,7 +18,7 @@ public class VendingMachine {
 
     public VendingMachine(Controller controller) {
         this.controller = controller;
-        this.inventory = new Inventory(this);
+        this.inventory = new Inventory();
         CallVendingMachine();
     }
 

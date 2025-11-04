@@ -8,11 +8,9 @@ import java.util.Random;
 
 public class Inventory {
     private final Map<Integer, Integer> drinkStock = new HashMap<>();
-    private VendingMachine machine;
     private final List<DrinkStorage> drinkStorages = new ArrayList<>();
 
-    public Inventory(VendingMachine machine) {
-        this.machine = machine;
+    public Inventory() {
         for (int i = 0; i < 10; i++) {
             DrinkStorage drinkStorage = new DrinkStorage();
             drinkStorages.add(drinkStorage);
