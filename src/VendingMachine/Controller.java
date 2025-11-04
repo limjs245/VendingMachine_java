@@ -18,7 +18,7 @@ public class Controller {
     public Controller() {
         this.machine = new VendingMachine(this);
         this.userCommunicate = new UserCommunicate(this);
-        this.balance = new Balance(this);
+        this.balance = new Balance(this, 1000000);
         VendingMachineUI machineUI = new VendingMachineUI(machine);
         PopUpUI popUpUI = new PopUpUI(userCommunicate);
         DrinkInfoPopUpUI drinkInfoPopUpUI = new DrinkInfoPopUpUI(machine);
