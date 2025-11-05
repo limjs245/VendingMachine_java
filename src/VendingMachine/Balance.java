@@ -9,7 +9,6 @@ public class Balance {
     // 돈이 아무리 많아도 + 100원이 아무리 많아도 21억개 있지는 않을테니 short(32767)로 제한
     short[] moneyArray = new short[6];
     int totalMoney; // 자판기가 가지고 있는 돈도 short 범위를 넘어가니 int타입으로 지정
-
     // 기본 생성자
     // 생성 시 돈 확인 및 분류
     Balance(int totalMoney) {

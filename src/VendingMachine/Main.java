@@ -59,7 +59,7 @@ class RUN {
     }
 
     private String[] setDrinkStock() {
-        final String stock = openPopUp(popup, "Drink Stock[,,,,,,,,,]", true);
+        final String stock = openPopUp(popup, "Input Stock ex)1,2,3,4,5,6,7,8,9,0", true);
         String[] stockArrayOfString = stock.split(",");
 
         if (stockArrayOfString.length != 10) {
